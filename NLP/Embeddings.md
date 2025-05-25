@@ -2,7 +2,7 @@
 13:45
 
 Status:
-Tags: [[NLP]], [[Transformer]] 
+Tags: [[NLP]], [[2 - Tags/Transformer]] 
 
 
 # Embeddings
