@@ -2,7 +2,8 @@
 21:28
 
 Status:
-Tags:
+Tags:[[Liklihood]], 
+
 
 # Estimators
 
@@ -46,7 +47,6 @@ But now you're treating x as fixed and exploring p as variable.
 ### 🔄 General Steps to Write a Likelihood Function
 
 1. **Specify the distribution of your data.**
-    
     - Identify the probability mass function (pmf) or probability density function (pdf) of your random variable, depending on whether it's discrete or continuous.
 
 2. **Write the joint probability of the observed data.**
