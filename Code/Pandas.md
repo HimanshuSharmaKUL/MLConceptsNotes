@@ -62,10 +62,8 @@ outer_merge = df1.merge(df2, left_on='key', right_on='another_key', how='outer')
 ```python
 #Temporarily Rename
 df.rename(columns = {'old_name': 'new_name'})
-
 #Permanently Rename (in place)
 df.rename(columns = {'old_name': 'new_name'}, inplace = True)
-
 #Rename all columns
 df.columns = ['new_name1', 'new_name2','new_name3']
 ```
@@ -114,4 +112,76 @@ Identifying duplicates might require considering a subset of columns. For instan
 ```python
 # Consider only the 'A' column to identify duplicates
 df_unique_A = df.drop_duplicates(subset=['A'])
+```
+
+#### 5. Aggregating
+- **`groupby()`**: uses Split-Apply-Combine technique i.e. `.groupby("column_name")` splits a dataframe into groups based on specified keys, often column names, then apply a function to each group and combine the results.
+- aggregation functions: common ones -> `.sum()`, `.mean()`, `.median()`, `.count()`, and `.std()`
+- Chaining GroupBy Methods: `.filter()`, `.apply()`, `.transform()`, `.assign()`.
+- 
+Example: Statistical Consulting
+```python
+sales_RFM = sales.groupby('CustomerId').agg({
+    'ProductId': lambda y: y.mode(),
+    'NumberOfRides': lambda y: y.sum(), #TotalRides
+    'PurchaseDate': lambda y: (sales['PurchaseDate'].max()-y.max()).days, #Recency
+    #'Price' : lambda y: len(y), #Kitni bari khareeda : Frequency
+    'Price' : lambda y: round(y.sum(),2),  #Total kitne kharch kare: Monetary
+    #'Price' : lambda y: round(y.mean(),2), #Average kitna khareeda
+    #'Price' : lambda y: round(y.mode(), 2) #Sabse jyada kya khareeda
+})
+
+def f(x, sales):
+    y={}
+    y['ProductId_1'] = x['ProductId'].value_counts().index[0] #Most brought product
+    y['TotalRides'] = x['NumberOfRides'].sum() #Total Rides
+    y['Recency'] = (sales['PurchaseDate'].max()-x['PurchaseDate'].max()).days
+    y['Frequency'] = len(x['Price'])
+    y['Monetary'] = round(x['Price'].sum(), 2)
+    y['AvgSpend'] = round(x['Price'].mean(), 2)
+    return pd.Series(y, index=['ProductId_1', 'TotalRides', 'Recency', 'Frequency', 'Monetary', 'AvgSpend'])
+
+sales_RFM = sales.groupby('CustomerId').apply(f, sales=sales)
+```
+
+Example: You call `.groupby()` and pass the name of the column that you want to group on, which is `["state", "gender"]`. Then, you use `["last_name"]` to specify the columns on which you want to perform the actual aggregation.
+```python
+n_by_state = df.groupby(["state", "gender"])["last_name"].count()
+```
+
+Example2: [1741. Find Total Time Spent by Each Employee](https://leetcode.com/problems/find-total-time-spent-by-each-employee/)
+```python
+def total_time(employees: pd.DataFrame) -> pd.DataFrame:
+    return employees.assign(total_time = employees['out_time']-employees['in_time'],
+                            day = employees['event_day'].dt.strftime('%Y-%m-%d'))
+                    .groupby(["emp_id", "day"], as_index=False)[["total_time"]].sum()[["day","emp_id","total_time"]]
+```
+
+Example3;
+```python
+
+#If we do:
+data[data.Year==2010].groupby(data['Week'], as_index=False)['Weekly_Sales'].mean()
+#You're filtering the `data` for `Year == 2010`, then trying to group that **filtered DataFrame** by `data['Week']` — which comes from the **original unfiltered `data`**, not from the filtered subset. 
+#- `data['Week']` might contain values that don’t exist in the filtered data
+#- It's **not aligned** with `data[data.Year == 2010]` by index
+#- So pandas can't guarantee the grouping is correct, and warns you about it
+
+#So, Correct way to do it => use 'Week' instead of data['Week']
+data[data.Year==2010].groupby('Week', as_index=False)['Weekly_Sales'].mean()
+```
+
+#### 6. Date Time
+```python
+data["Date"]=pd.to_datetime(data.Date) #OR
+data["Date"]=pd.to_datetime(data["Date"])
+
+data["Day"]=data.Date.dt.day
+data["Month"]=data.Date.dt.month
+data["Year"]=data.Date.dt.year
+data['Week'] = data.Date.dt.isocalendar().week
+
+# Changing the Months value from numbers to real values like Jan, Feb to Dec
+import calendar
+data['Month'] = data['Month'].apply(lambda x: calendar.month_abbr[x])
 ```

@@ -1,3 +1,6 @@
+---
+sticker: emoji//1f3d8-fe0f
+---
 [[ML Algorithms]] 
 
 #### KNN

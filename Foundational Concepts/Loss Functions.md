@@ -8,7 +8,7 @@ Tags: [[Liklihood]]
 
 ## Cross Entropy Loss
 
-**Definition**: Cross-entropy measures the dissimilarity between two probability distributions — typically, the predicted distribution y^\hat{y}y^​ (e.g., from a softmax layer) and the true distribution yyy (usually a one-hot encoded label).
+**Definition**: Cross-entropy measures the dissimilarity between two probability distributions — typically, the predicted distribution $\hat{y}​$ (e.g., from a softmax layer) and the true distribution $y$ (usually a one-hot encoded label).
 ##### Formula:
 For a single example:
 

@@ -1,6 +1,8 @@
 ---
 aliases: []
+sticker: emoji//1f4af
 ---
+[[Foundational Concepts]], [[SciKit Learn]] 
 ### Cross-validation: evaluating estimator performance
 - best params found by [[Grid Search]] techniques
 - then do a random test-train split

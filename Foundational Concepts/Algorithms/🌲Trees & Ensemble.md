@@ -237,6 +237,16 @@ $$
 
 
 
+| Bagging                                                                                 | Boosting                                                                     |
+| --------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
+| Can be done in parallel                                                                 | Done sequentially                                                            |
+| Guarenteed ↓ variance, but not necessarily bias                                         | Guarenteed ↓ Bias, not necessarily variance                                  |
+| Suitable to combine high variance low bias models (complex models) ex: RF               | Suitable to combine low variance high bias models (simple models) ex: XGB    |
+| ➡ Reducing the overt of ensembles of complex models (strength of diversity/randomness) | ➡ Reducing the error of ensembles of simple models (strength of cooperation) |
+![[Pasted image 20250724025932.png]]
+
+
+
 
 ```python
 from sklearn.linear_model import Lasso, LinearRegression, LassoCV
